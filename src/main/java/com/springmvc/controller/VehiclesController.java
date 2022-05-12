@@ -10,7 +10,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping(value = "/vehicles")
+@RequestMapping("/vehicles")
 public class VehiclesController {
 
     @RequestMapping
@@ -19,7 +19,7 @@ public class VehiclesController {
 
         model.addAttribute("vehicles", vehicles);
 
-        return "vehicle/list";
+        return "vehicles";
     }
 
     @RequestMapping(value = "/{plateNumber}")

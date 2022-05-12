@@ -6,7 +6,7 @@ import org.springframework.web.servlet.view.tiles3.TilesConfigurer;
 
 @Configuration
 public class TilesConfig {
-    
+
     @Bean
     public TilesConfigurer tilesConfigurer() {
         TilesConfigurer tilesConfigurer = new TilesConfigurer();
@@ -16,4 +16,13 @@ public class TilesConfig {
 
         return tilesConfigurer;
     }
+
+//    @Bean
+//    public UrlBasedViewResolver tilesResolver() {
+//        UrlBasedViewResolver tilesResolver = new UrlBasedViewResolver();
+//
+//        tilesResolver.setViewClass(TilesView.class);
+//
+//        return tilesResolver;
+//    }
 }

@@ -13,7 +13,7 @@ import org.springframework.web.servlet.view.tiles3.TilesViewResolver;
 
 @Configuration
 @EnableWebMvc
-@ComponentScan(basePackages = "com.springmvc")
+@ComponentScan(basePackages = "com.springmvc.*")
 public class ContextConfig implements WebMvcConfigurer {
 
     @Override

@@ -5,9 +5,11 @@ import com.springmvc.entity.Vehicle;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class VehicleDAO implements DAO<Vehicle> {
 
     public static List<Vehicle> findAll() {
@@ -64,7 +66,7 @@ public class VehicleDAO implements DAO<Vehicle> {
 
             Vehicle vehicle = findOne(id);
 
-            if (vehicle == null) throw new Exception("User not found");
+            if (vehicle == null) throw new Exception("Vehicle not found");
 
             session.delete(vehicle);
         } catch (Exception e) {

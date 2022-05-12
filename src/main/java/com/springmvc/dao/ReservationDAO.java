@@ -5,14 +5,16 @@ import com.springmvc.entity.Reservation;
 import org.hibernate.Session;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
+import org.springframework.stereotype.Repository;
 
 import java.util.List;
 
+@Repository
 public class ReservationDAO implements DAO<Reservation> {
 
     public static List<Reservation> findAll() {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Reservation> query = session.createQuery("SELECT Reservation FROM Reservation", Reservation.class);
+            Query<Reservation> query = session.createQuery("FROM Reservation", Reservation.class);
 
             return query.getResultList();
         }
@@ -20,7 +22,7 @@ public class ReservationDAO implements DAO<Reservation> {
 
     public static Reservation findOne(int id) {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Reservation> query = session.createQuery("SELECT Reservation FROM Reservation WHERE id = :id", Reservation.class);
+            Query<Reservation> query = session.createQuery("FROM Reservation WHERE id = :id", Reservation.class);
 
             query.setParameter("id", id);
 

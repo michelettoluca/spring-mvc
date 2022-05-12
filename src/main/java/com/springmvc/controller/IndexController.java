@@ -16,7 +16,7 @@ public class IndexController {
     }
 
     @RequestMapping(value = "**")
-    public String setName(Model model) {
+    public String setAltro(Model model) {
         model.addAttribute("name", "**");
 
         return "index";

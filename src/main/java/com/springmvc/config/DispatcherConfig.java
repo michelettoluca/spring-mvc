@@ -1,9 +1,8 @@
 package com.springmvc.config;
 
-import org.springframework.context.annotation.Configuration;
 import org.springframework.web.servlet.support.AbstractAnnotationConfigDispatcherServletInitializer;
 
-@Configuration
+//@Configuration
 public class DispatcherConfig extends AbstractAnnotationConfigDispatcherServletInitializer {
 
     @Override

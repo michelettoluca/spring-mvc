@@ -14,7 +14,7 @@ public class UserDAO implements DAO<User> {
 
     public static List<User> findAll() {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<User> query = session.createQuery("SELECT User FROM User", User.class);
+            Query<User> query = session.createQuery("FROM User", User.class);
 
             return query.getResultList();
         }
@@ -22,7 +22,7 @@ public class UserDAO implements DAO<User> {
 
     public static User findOne(int id) {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<User> query = session.createQuery("SELECT User FROM User WHERE id = :id", User.class);
+            Query<User> query = session.createQuery("FROM User WHERE id = :id", User.class);
 
             query.setParameter("id", id);
 
@@ -32,7 +32,7 @@ public class UserDAO implements DAO<User> {
 
     public static User findOne(String username) {
         try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<User> query = session.createQuery("SELECT User FROM User WHERE username = :username", User.class);
+            Query<User> query = session.createQuery("FROM User WHERE username = :username", User.class);
             query.setParameter("username", username);
 
             return query.getSingleResult();
