@@ -4,9 +4,12 @@ import com.springmvc.entity.Reservation;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
@@ -21,20 +24,30 @@ public class ReservationDAO implements DAO<Reservation> {
     @Override
     public List<Reservation> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<Reservation> query = session.createQuery("FROM Reservation", Reservation.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Reservation> query = criteriaBuilder.createQuery(Reservation.class);
 
-            return query.getResultList();
+            Root<Reservation> root = query.from(Reservation.class);
+
+            query.select(root);
+
+            return session.createQuery(query).getResultList();
         }
     }
 
     @Override
     public Reservation findOne(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<Reservation> query = session.createQuery("FROM Reservation WHERE id = :id", Reservation.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Reservation> query = criteriaBuilder.createQuery(Reservation.class);
 
-            query.setParameter("id", id);
+            Root<Reservation> root = query.from(Reservation.class);
 
-            return query.getSingleResult();
+            Path<Integer> rId = root.get("id");
+
+            query.select(root).where(criteriaBuilder.equal(rId, id));
+
+            return session.createQuery(query).getSingleResult();
         }
     }
 

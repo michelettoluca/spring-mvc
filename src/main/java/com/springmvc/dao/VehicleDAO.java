@@ -60,7 +60,7 @@ public class VehicleDAO implements DAO<Vehicle> {
 
             Path<String> rPlateNumber = root.get("plateNumber");
 
-            query.select(root).where(criteriaBuilder.like(rPlateNumber, plateNumber));
+            query.select(root).where(criteriaBuilder.equal(rPlateNumber, plateNumber));
 
             return session.createQuery(query).getSingleResult();
         }

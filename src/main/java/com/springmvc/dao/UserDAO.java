@@ -4,16 +4,17 @@ import com.springmvc.entity.User;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 public class UserDAO implements DAO<User> {
 
-    //    @Autowired
-//    private SessionFactory sessionFactory;
     private final SessionFactory sessionFactory;
 
     public UserDAO(SessionFactory sessionFactory) {
@@ -23,29 +24,45 @@ public class UserDAO implements DAO<User> {
     @Override
     public List<User> findAll() {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("FROM User", User.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
 
-            return query.getResultList();
+            Root<User> root = query.from(User.class);
+
+            query.select(root);
+
+            return session.createQuery(query).getResultList();
         }
     }
 
     @Override
     public User findOne(int id) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("FROM User WHERE id = :id", User.class);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
 
-            query.setParameter("id", id);
+            Root<User> root = query.from(User.class);
 
-            return query.getSingleResult();
+            Path<Integer> rId = root.get("id");
+
+            query.select(root).where(criteriaBuilder.equal(rId, id));
+
+            return session.createQuery(query).getSingleResult();
         }
     }
 
-    public User findOne(String username) {
+    public User findOneByUsername(String username) {
         try (Session session = sessionFactory.openSession()) {
-            Query<User> query = session.createQuery("FROM User WHERE username = :username", User.class);
-            query.setParameter("username", username);
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
 
-            return query.getSingleResult();
+            Root<User> root = query.from(User.class);
+
+            Path<String> rUsername = root.get("username");
+
+            query.select(root).where(criteriaBuilder.equal(rUsername, username));
+
+            return session.createQuery(query).getSingleResult();
         }
     }
 
