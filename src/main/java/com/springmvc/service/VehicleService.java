@@ -1,29 +1,17 @@
 package com.springmvc.service;
 
-import com.springmvc.dao.VehicleDAO;
 import com.springmvc.entity.Vehicle;
 
 import java.util.List;
 
-public class VehicleService implements Service<Vehicle> {
+public interface VehicleService {
+    List<Vehicle> findAll();
 
-    public static List<Vehicle> findAll() {
-        return VehicleDAO.findAll();
-    }
+    Vehicle findOne(int id);
 
-    public static Vehicle findOne(int id) {
-        return VehicleDAO.findOne(id);
-    }
+    void save(Vehicle entity);
 
-    public static Vehicle findOneByPlateNumber(String plateNumber) {
-        return VehicleDAO.findOneByPlateNumber(plateNumber);
-    }
+    void delete(int id);
 
-    public static void save(Vehicle user) {
-
-    }
-
-    public static void delete(int id) {
-
-    }
+    Vehicle findOneByPlateNumber(String plateNumber);
 }

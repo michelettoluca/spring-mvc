@@ -21,5 +21,12 @@ public class IndexController {
 
         return "index";
     }
+
+    @RequestMapping(value = "index")
+    public String setIndex(Model model) {
+        model.addAttribute("name", "index");
+
+        return "index";
+    }
 }
 

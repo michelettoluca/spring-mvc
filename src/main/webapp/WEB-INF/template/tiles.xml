@@ -15,6 +15,11 @@
         <put-attribute name="title" value="ASDASD"/>
         <put-attribute name="content" value="/WEB-INF/view/vehicle/list.jsp"/>
     </definition>
+
+    <definition name="vehicles/details" extends="baseLayout">
+        <put-attribute name="title" value="VEHICLE/DETAILS ASDASD"/>
+        <put-attribute name="content" value="/WEB-INF/view/vehicle/details.jsp"/>
+    </definition>
     <definition name="index" extends="baseLayout">
         <put-attribute name="title" value="INDEX ASDASD"/>
         <put-attribute name="content" value="/WEB-INF/view/index.jsp"/>

@@ -10,12 +10,18 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import java.util.List;
 
 @Controller
-@RequestMapping("/vehicles")
+@RequestMapping(value = "/vehicles")
 public class VehiclesController {
+
+    private final VehicleService vehicleService;
+
+    public VehiclesController(VehicleService vehicleService) {
+        this.vehicleService = vehicleService;
+    }
 
     @RequestMapping
     public String list(Model model) {
-        List<Vehicle> vehicles = VehicleService.findAll();
+        List<Vehicle> vehicles = vehicleService.findAll();
 
         model.addAttribute("vehicles", vehicles);
 
@@ -27,10 +33,10 @@ public class VehiclesController {
             @PathVariable String plateNumber,
             Model model
     ) {
-        Vehicle vehicle = VehicleService.findOneByPlateNumber(plateNumber);
+        Vehicle vehicle = vehicleService.findOneByPlateNumber(plateNumber);
 
         model.addAttribute("vehicle", vehicle);
 
-        return "vehicle/details";
+        return "vehicles/details";
     }
 }

@@ -4,21 +4,12 @@ import com.springmvc.entity.User;
 
 import java.util.List;
 
-public class UserService implements Service<User> {
+public interface UserService {
+    List<User> findAll();
 
-    public List<User> findAll() {
-        return null;
-    }
+    User findOne(int id);
 
-    public User findOne(int id) {
-        return null;
-    }
+    void save(User entity);
 
-    public void save(User user) {
-
-    }
-
-    public void delete(int id) {
-
-    }
+    void delete(int id);
 }

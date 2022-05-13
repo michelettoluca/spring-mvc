@@ -1,49 +1,76 @@
 package com.springmvc.dao;
 
-import com.springmvc.config.HibernateConfig;
 import com.springmvc.entity.Vehicle;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
-import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
+import javax.persistence.criteria.CriteriaBuilder;
+import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
+import javax.persistence.criteria.Root;
 import java.util.List;
 
 @Repository
 public class VehicleDAO implements DAO<Vehicle> {
 
-    public static List<Vehicle> findAll() {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Vehicle> query = session.createQuery("FROM Vehicle", Vehicle.class);
+    private final SessionFactory sessionFactory;
 
-            return query.list();
+    public VehicleDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public List<Vehicle> findAll() {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Vehicle> query = criteriaBuilder.createQuery(Vehicle.class);
+
+            Root<Vehicle> root = query.from(Vehicle.class);
+
+            query.select(root);
+
+            return session.createQuery(query).getResultList();
         }
     }
 
-    public static Vehicle findOne(int id) {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Vehicle> query = session.createQuery("FROM Vehicle WHERE id = :id", Vehicle.class);
+    @Override
+    public Vehicle findOne(int id) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Vehicle> query = criteriaBuilder.createQuery(Vehicle.class);
 
-            query.setParameter("id", id);
+            Root<Vehicle> root = query.from(Vehicle.class);
 
-            return query.getSingleResult();
+            Path<Integer> rId = root.get("id");
+
+            query.select(root).where(criteriaBuilder.equal(rId, id));
+
+            return session.createQuery(query).getSingleResult();
         }
     }
 
-    public static Vehicle findOneByPlateNumber(String plateNumber) {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
-            Query<Vehicle> query = session.createQuery("FROM Vehicle WHERE plateNumber = :plateNumber", Vehicle.class);
+    public Vehicle findOneByPlateNumber(String plateNumber) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Vehicle> query = criteriaBuilder.createQuery(Vehicle.class);
 
-            query.setParameter("plateNumber", plateNumber);
+            Root<Vehicle> root = query.from(Vehicle.class);
 
-            return query.getSingleResult();
+            Path<String> rPlateNumber = root.get("plateNumber");
+
+            query.select(root).where(criteriaBuilder.like(rPlateNumber, plateNumber));
+
+            return session.createQuery(query).getSingleResult();
         }
     }
 
-    public static Vehicle save(Vehicle vehicle) {
+    @Override
+    public Vehicle save(Vehicle vehicle) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             session.saveOrUpdate(vehicle);
@@ -58,15 +85,16 @@ public class VehicleDAO implements DAO<Vehicle> {
         }
     }
 
-    public static void delete(int id) throws Exception {
+    @Override
+    public void delete(int id) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             Vehicle vehicle = findOne(id);
 
-            if (vehicle == null) throw new Exception("Vehicle not found");
+//            if (vehicle == null) throw new Exception("Vehicle not found");
 
             session.delete(vehicle);
         } catch (Exception e) {

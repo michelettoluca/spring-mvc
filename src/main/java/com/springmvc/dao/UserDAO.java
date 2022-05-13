@@ -1,8 +1,8 @@
 package com.springmvc.dao;
 
-import com.springmvc.config.HibernateConfig;
 import com.springmvc.entity.User;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -12,16 +12,26 @@ import java.util.List;
 @Repository
 public class UserDAO implements DAO<User> {
 
-    public static List<User> findAll() {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+    //    @Autowired
+//    private SessionFactory sessionFactory;
+    private final SessionFactory sessionFactory;
+
+    public UserDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public List<User> findAll() {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User", User.class);
 
             return query.getResultList();
         }
     }
 
-    public static User findOne(int id) {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+    @Override
+    public User findOne(int id) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE id = :id", User.class);
 
             query.setParameter("id", id);
@@ -30,8 +40,8 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public static User findOne(String username) {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+    public User findOne(String username) {
+        try (Session session = sessionFactory.openSession()) {
             Query<User> query = session.createQuery("FROM User WHERE username = :username", User.class);
             query.setParameter("username", username);
 
@@ -39,10 +49,11 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public static User save(User user) {
+    @Override
+    public User save(User user) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             session.saveOrUpdate(user);
@@ -57,10 +68,11 @@ public class UserDAO implements DAO<User> {
         }
     }
 
-    public static void delete(int id) {
+    @Override
+    public void delete(int id) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             User user = findOne(id);

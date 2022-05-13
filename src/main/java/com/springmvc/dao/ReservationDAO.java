@@ -1,8 +1,8 @@
 package com.springmvc.dao;
 
-import com.springmvc.config.HibernateConfig;
 import com.springmvc.entity.Reservation;
 import org.hibernate.Session;
+import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
@@ -12,16 +12,24 @@ import java.util.List;
 @Repository
 public class ReservationDAO implements DAO<Reservation> {
 
-    public static List<Reservation> findAll() {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+    private final SessionFactory sessionFactory;
+
+    public ReservationDAO(SessionFactory sessionFactory) {
+        this.sessionFactory = sessionFactory;
+    }
+
+    @Override
+    public List<Reservation> findAll() {
+        try (Session session = sessionFactory.openSession()) {
             Query<Reservation> query = session.createQuery("FROM Reservation", Reservation.class);
 
             return query.getResultList();
         }
     }
 
-    public static Reservation findOne(int id) {
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+    @Override
+    public Reservation findOne(int id) {
+        try (Session session = sessionFactory.openSession()) {
             Query<Reservation> query = session.createQuery("FROM Reservation WHERE id = :id", Reservation.class);
 
             query.setParameter("id", id);
@@ -30,10 +38,11 @@ public class ReservationDAO implements DAO<Reservation> {
         }
     }
 
-    public static Reservation save(Reservation reservation) {
+    @Override
+    public Reservation save(Reservation reservation) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             session.saveOrUpdate(reservation);
@@ -48,10 +57,11 @@ public class ReservationDAO implements DAO<Reservation> {
         }
     }
 
-    public static void delete(int id) {
+    @Override
+    public void delete(int id) {
         Transaction transaction = null;
 
-        try (Session session = HibernateConfig.getSessionFactory().openSession()) {
+        try (Session session = sessionFactory.openSession()) {
             transaction = session.beginTransaction();
 
             Reservation reservation = findOne(id);
