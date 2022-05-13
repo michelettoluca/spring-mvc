@@ -3,25 +3,79 @@
 <!DOCTYPE tiles-definitions PUBLIC "-//Apache Software Foundation//DTD Tiles Configuration 3.0//EN"
         "http://tiles.apache.org/dtds/tiles-config_3_0.dtd">
 
-
 <tiles-definitions>
-    <definition name="baseLayout" template="/WEB-INF/template/common/base.jsp">
+    <!-- Definitions -->
+
+    <definition name="base" template="/WEB-INF/template/base.jsp">
         <put-attribute name="title" value=""/>
+
+        <put-attribute name="navbar" value="/WEB-INF/template/navbar.jsp"/>
         <put-attribute name="content" value=""/>
-        <put-attribute name="footer" value="/WEB-INF/template/common/footer.jsp"/>
+        <put-attribute name="footer" value="/WEB-INF/template/footer.jsp"/>
+
+        <put-attribute name="formHeader" value=""/>
+        <put-attribute name="submitButton" value=""/>
     </definition>
 
-    <definition name="vehicles" extends="baseLayout">
-        <put-attribute name="title" value="ASDASD"/>
+    <definition name="saveUser" template="/WEB-INF/view/user/save.jsp">
+        <put-attribute name="formHeader" value=""/>
+        <put-attribute name="submitButton" value=""/>
+    </definition>
+
+    <definition name="signUp" extends="saveUser">
+        <put-attribute name="formHeader" value="Sign up"/>
+        <put-attribute name="submitButton" value="Sign up"/>
+    </definition>
+
+    <definition name="editProfile" extends="saveUser">
+        <put-attribute name="formHeader" value="Edit profile"/>
+        <put-attribute name="submitButton" value="Edit profile"/>
+    </definition>
+
+    <definition name="addCustomer" extends="saveUser">
+        <put-attribute name="formHeader" value="Add customer"/>
+        <put-attribute name="submitButton" value="Add customer"/>
+    </definition>
+
+    <!-- route "/" -->
+
+    <definition name="index" extends="base">
+        <put-attribute name="title" value="Sign up"/>
+        <put-attribute name="content" value="/WEB-INF/view/index.jsp"/>
+    </definition>
+
+    <definition name="sign-up" extends="base">
+        <put-attribute name="title" value="Sign up"/>
+        <put-attribute name="content" value="signUp"/>
+    </definition>
+
+    <definition name="sign-in" extends="base">
+        <put-attribute name="title" value="Sign up"/>
+        <put-attribute name="content" value="/WEB-INF/view/user/authenticate.jsp"/>
+    </definition>
+
+    <!-- route "/vehicles" -->
+
+    <definition name="vehicles" extends="base">
+        <put-attribute name="title" value="Vehicles"/>
         <put-attribute name="content" value="/WEB-INF/view/vehicle/list.jsp"/>
     </definition>
 
-    <definition name="vehicles/details" extends="baseLayout">
+    <definition name="vehicles/details" extends="base">
         <put-attribute name="title" value="VEHICLE/DETAILS ASDASD"/>
         <put-attribute name="content" value="/WEB-INF/view/vehicle/details.jsp"/>
     </definition>
-    <definition name="index" extends="baseLayout">
-        <put-attribute name="title" value="INDEX ASDASD"/>
-        <put-attribute name="content" value="/WEB-INF/view/index.jsp"/>
+
+    <!-- route "/admin" -->
+
+    <definition name="admin/add-customer" extends="base">
+        <put-attribute name="title" value="Add customer"/>
+        <put-attribute name="content" value="saveUser"/>
     </definition>
+
+    <definition name="profile/edit-user" extends="base">
+        <put-attribute name="title" value="Edit profile"/>
+        <put-attribute name="content" value="saveUser"/>
+    </definition>
+
 </tiles-definitions>

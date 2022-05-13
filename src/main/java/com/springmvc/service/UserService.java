@@ -7,9 +7,11 @@ import java.util.List;
 public interface UserService {
     List<User> findAll();
 
-    User findOne(int id);
+    User findOneById(int id);
 
-    void save(User entity);
+    User findOneByUsername(String username);
+
+    void save(User user);
 
     void delete(int id);
 }

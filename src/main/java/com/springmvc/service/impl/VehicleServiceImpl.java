@@ -1,6 +1,6 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.dao.VehicleDAO;
+import com.springmvc.dao.impl.VehicleDAOImpl;
 import com.springmvc.entity.Vehicle;
 import com.springmvc.service.VehicleService;
 import org.springframework.stereotype.Service;
@@ -11,9 +11,9 @@ import java.util.List;
 @Service
 @Transactional
 public class VehicleServiceImpl implements VehicleService {
-    private final VehicleDAO dao;
+    private final VehicleDAOImpl dao;
 
-    public VehicleServiceImpl(VehicleDAO dao) {
+    public VehicleServiceImpl(VehicleDAOImpl dao) {
         this.dao = dao;
     }
 
@@ -24,7 +24,7 @@ public class VehicleServiceImpl implements VehicleService {
 
     @Override
     public Vehicle findOne(int id) {
-        return dao.findOne(id);
+        return dao.findOneById(id);
     }
 
     @Override

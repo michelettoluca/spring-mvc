@@ -1,91 +1,15 @@
 package com.springmvc.dao;
 
 import com.springmvc.entity.Reservation;
-import org.hibernate.Session;
-import org.hibernate.SessionFactory;
-import org.hibernate.Transaction;
-import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
 import java.util.List;
 
-@Repository
-public class ReservationDAO implements DAO<Reservation> {
+public interface ReservationDAO {
+    List<Reservation> findAll();
 
-    private final SessionFactory sessionFactory;
+    Reservation findOneById(int id);
 
-    public ReservationDAO(SessionFactory sessionFactory) {
-        this.sessionFactory = sessionFactory;
-    }
+    Reservation save(Reservation reservation);
 
-    @Override
-    public List<Reservation> findAll() {
-        try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Reservation> query = criteriaBuilder.createQuery(Reservation.class);
-
-            Root<Reservation> root = query.from(Reservation.class);
-
-            query.select(root);
-
-            return session.createQuery(query).getResultList();
-        }
-    }
-
-    @Override
-    public Reservation findOne(int id) {
-        try (Session session = sessionFactory.openSession()) {
-            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
-            CriteriaQuery<Reservation> query = criteriaBuilder.createQuery(Reservation.class);
-
-            Root<Reservation> root = query.from(Reservation.class);
-
-            Path<Integer> rId = root.get("id");
-
-            query.select(root).where(criteriaBuilder.equal(rId, id));
-
-            return session.createQuery(query).getSingleResult();
-        }
-    }
-
-    @Override
-    public Reservation save(Reservation reservation) {
-        Transaction transaction = null;
-
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-
-            session.saveOrUpdate(reservation);
-
-            return reservation;
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-
-            e.printStackTrace();
-
-            return null;
-        }
-    }
-
-    @Override
-    public void delete(int id) {
-        Transaction transaction = null;
-
-        try (Session session = sessionFactory.openSession()) {
-            transaction = session.beginTransaction();
-
-            Reservation reservation = findOne(id);
-
-            if (reservation == null) throw new Exception("Reservation not found");
-
-            session.delete(reservation);
-        } catch (Exception e) {
-            if (transaction != null) transaction.rollback();
-
-            e.printStackTrace();
-        }
-    }
+    void delete(int id);
 }
