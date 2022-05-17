@@ -27,8 +27,7 @@
                     <td>${availableVehicle.plateNumber}</td>
                     <td>${availableVehicle.type}</td>
                     <td>
-                        <form method="POST" action="vehicles">
-                            <input type="hidden" name="action" value="DELETE_VEHICLE">
+                        <form method="POST" action="<c:url value="/vehicles/delete"/>">
                             <input type="hidden" name="id" value="${availableVehicle.id}">
                             <input type="submit" value="Delete">
                         </form>

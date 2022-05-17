@@ -118,9 +118,7 @@ public class VehicleDAOImpl implements VehicleDAO {
 
             Vehicle vehicle = findOneById(id);
 
-//            if (vehicle == null) throw new Exception("Vehicle not found");
-
-            session.delete(vehicle);
+            session.delete(session.merge(vehicle));
 
             transaction.commit();
         } catch (Exception e) {

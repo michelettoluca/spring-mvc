@@ -62,9 +62,7 @@ public class VehicleController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String postSaveUser(
             @ModelAttribute("vehicle") Vehicle vehicle
-
     ) {
-
         vehicleService.save(vehicle);
 
         return "redirect:/vehicles";
@@ -72,9 +70,9 @@ public class VehicleController {
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
     public String postDeleteUser(
-            @ModelAttribute("vehicle") Vehicle vehicle
+            @ModelAttribute("id") Integer id
     ) {
-        vehicleService.delete(vehicle.getId());
+        vehicleService.delete(id);
 
         return "redirect:/vehicles";
     }

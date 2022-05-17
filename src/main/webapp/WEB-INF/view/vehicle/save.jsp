@@ -25,8 +25,8 @@
         </div>
         <div class="form-field">
             <label class="input-label" for="dateOfRegistration">Date of Registration</label>
-            <input type="date" class="input-text" value="${vehicle.dateOfRegistration}" id="dateOfRegistration"
-                   name="dateOfRegistration"/>
+            <form:input type="date" class="input-text" value="${vehicle.dateOfRegistration}" path="dateOfRegistration"
+                        id="dateOfRegistration" name="dateOfRegistration"/>
         </div>
         <div class="form-field">
             <label class="input-label" for="plateNumber">Plate #</label>

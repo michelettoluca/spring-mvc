@@ -1,6 +1,7 @@
 package com.springmvc.entity;
 
 import com.springmvc.type.ReservationStatus;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,11 +16,11 @@ public class Reservation implements Serializable {
     @Column(name = "id")
     private int id;
 
-    //    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "begins_at")
     private LocalDate beginsAt;
 
-    //    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "ends_at")
     private LocalDate endsAt;
 
