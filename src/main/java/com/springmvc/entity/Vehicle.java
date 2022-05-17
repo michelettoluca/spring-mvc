@@ -1,6 +1,7 @@
 package com.springmvc.entity;
 
 import jakarta.validation.constraints.NotNull;
+import org.springframework.format.annotation.DateTimeFormat;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -22,6 +23,7 @@ public class Vehicle implements Serializable {
     private String model;
 
     //    @Temporal(TemporalType.DATE)
+    @DateTimeFormat(iso = DateTimeFormat.ISO.DATE)
     @Column(name = "date_of_registration")
     private LocalDate dateOfRegistration;
 

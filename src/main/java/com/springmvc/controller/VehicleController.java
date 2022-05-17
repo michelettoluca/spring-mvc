@@ -62,7 +62,9 @@ public class VehicleController {
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String postSaveUser(
             @ModelAttribute("vehicle") Vehicle vehicle
+
     ) {
+
         vehicleService.save(vehicle);
 
         return "redirect:/vehicles";

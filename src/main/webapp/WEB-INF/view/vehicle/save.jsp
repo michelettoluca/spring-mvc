@@ -14,29 +14,29 @@
         <form:input type="hidden" path="id" name="id" value="${vehicle.id}"/>
 
         <div class="form-field">
-            <label class="input-label" for="brand">brand</label>
+            <label class="input-label" for="brand">Brand</label>
             <form:input class="input-text" type="text" path="brand" name="brand" id="brand"
-                        placeholder="brand" value="${vehicle.brand}"/>
+                        placeholder="Brand" value="${vehicle.brand}"/>
         </div>
         <div class="form-field">
-            <label class="input-label" for="model">model</label>
+            <label class="input-label" for="model">Model</label>
             <form:input class="input-text" type="text" path="model" name="model" id="model"
                         placeholder="Model" value="${vehicle.model}"/>
         </div>
         <div class="form-field">
-            <label class="input-label" for="dateOfRegistration">dateOfRegistration</label>
-            <form:input type="date" class="input-text" path="dateOfRegistration" value="${vehicle.dateOfRegistration}"
-                        name="dateOfRegistration"/>
+            <label class="input-label" for="dateOfRegistration">Date of Registration</label>
+            <input type="date" class="input-text" value="${vehicle.dateOfRegistration}" id="dateOfRegistration"
+                   name="dateOfRegistration"/>
         </div>
         <div class="form-field">
-            <label class="input-label" for="plateNumber">plateNumber</label>
+            <label class="input-label" for="plateNumber">Plate #</label>
             <form:input class="input-text" type="text" path="plateNumber" name="plateNumber" id="plateNumber"
-                        placeholder="Password" value="${vehicle.plateNumber}"/>
+                        placeholder="Plate #" value="${vehicle.plateNumber}"/>
         </div>
         <div class="form-field">
-            <label class="input-label" for="type">type</label>
+            <label class="input-label" for="type">Type</label>
             <form:input class="input-text" type="text" path="type" name="type" id="type"
-                        placeholder="Password" value="${vehicle.type}"/>
+                        placeholder="Type" value="${vehicle.type}"/>
         </div>
         <form:button type="submit" class="button-submit"><tiles:insertAttribute name="submitButton"/></form:button>
     </form:form>
