@@ -1,7 +1,6 @@
 package com.springmvc.controller;
 
 import com.springmvc.entity.User;
-import com.springmvc.service.AuthenticationService;
 import com.springmvc.service.UserService;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -14,11 +13,14 @@ import org.springframework.web.bind.annotation.RequestMethod;
 public class RootController {
 
     private final UserService userService;
-    private final AuthenticationService authenticationService;
+//    private final AuthenticationService authenticationService;
 
-    public RootController(UserService userService, AuthenticationService authenticationService) {
+    public RootController(
+            UserService userService
+//            AuthenticationService authenticationService
+    ) {
         this.userService = userService;
-        this.authenticationService = authenticationService;
+//        this.authenticationService = authenticationService;
     }
 
     //  ----
@@ -31,7 +33,9 @@ public class RootController {
     }
 
     @RequestMapping(value = "sign-in", method = RequestMethod.GET)
-    public String getSignIn(Model model) {
+    public String getSignIn(
+            Model model
+    ) {
         User user = new User();
 
         model.addAttribute("user", user);
@@ -40,7 +44,9 @@ public class RootController {
     }
 
     @RequestMapping(value = "sign-up", method = RequestMethod.GET)
-    public String getSignUp(Model model) {
+    public String getSignUp(
+            Model model
+    ) {
         User user = new User();
 
         model.addAttribute("user", user);
@@ -53,11 +59,20 @@ public class RootController {
     //  ----
 
     @RequestMapping(value = "sign-up", method = RequestMethod.POST)
-    public String postSignUp(@ModelAttribute("user") User user) {
-        userService.save(user);
-//        authenticationService.signIn(user.getUsername(), user.getPassword());
+    public String postSignIn(
+            @ModelAttribute("user") User user
+    ) {
 
-        return "redirect:/";
+        switch (user.getRole()) {
+            case ADMIN:
+                return "redirect:/admin";
+
+            case CUSTOMER:
+                return "redirect:/profile";
+
+            default:
+                return "redirect:/";
+        }
     }
 }
 

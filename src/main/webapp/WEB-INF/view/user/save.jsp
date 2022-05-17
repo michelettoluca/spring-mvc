@@ -1,4 +1,5 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
+
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
@@ -6,8 +7,7 @@
 <%--@elvariable id="user" type="com.springmvc.entity.User"--%>
 
 <div class="form-wrapper">
-    <form:form method="POST" modelAttribute="user">
-        ${param.id}
+    <form:form method="POST" action="${pageContext.request.contextPath}/users/save" modelAttribute="user">
         <span class="form-header"><tiles:insertAttribute name="formHeader"/></span>
         <input type="hidden" name="origin" value="${param.origin}"/>
         <form:input type="hidden" path="role" name="role" value="CUSTOMER"/>
@@ -33,6 +33,6 @@
             <form:input class="input-text" type="password" path="password" name="password" id="password"
                         placeholder="Password" value="${user.password}"/>
         </div>
-        <button class="button-submit"><tiles:insertAttribute name="submitButton"/></button>
+        <form:button type="submit" class="button-submit"><tiles:insertAttribute name="submitButton"/></form:button>
     </form:form>
 </div>

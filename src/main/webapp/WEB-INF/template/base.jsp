@@ -16,7 +16,5 @@
 <div class="container">
     <tiles:insertAttribute name="content"/>
 </div>
-
-<tiles:insertAttribute name="footer"/>
 </body>
 </html>

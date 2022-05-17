@@ -2,15 +2,18 @@ package com.springmvc.dao.impl;
 
 import com.springmvc.dao.VehicleDAO;
 import com.springmvc.entity.Vehicle;
+import com.springmvc.type.ReservationStatus;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
+import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
+import java.time.LocalDate;
 import java.util.List;
 
 @Repository
@@ -33,6 +36,23 @@ public class VehicleDAOImpl implements VehicleDAO {
             query.select(root);
 
             return session.createQuery(query).getResultList();
+        }
+    }
+
+    @Override
+    public List<Vehicle> findAvailableVehicles(LocalDate from, LocalDate to) {
+        try (Session session = sessionFactory.openSession()) {
+            Query<Vehicle> query = session.createQuery(
+                    "from Vehicle as v where v.id not in " +
+                            "(select v2.id from Vehicle as v2 inner join Reservation as r on r.vehicle.id = v2.id " +
+                            "where r.beginsAt < :from and r.endsAt > :to and (r.status != :status))",
+                    Vehicle.class);
+
+            query.setParameter("from", from);
+            query.setParameter("to", to);
+            query.setParameter("status", ReservationStatus.DENIED);
+
+            return query.getResultList();
         }
     }
 

@@ -1,9 +1,10 @@
 package com.springmvc.service;
 
 import com.springmvc.entity.User;
+import org.springframework.security.core.userdetails.UserDetailsService;
 
-public interface AuthenticationService {
-    User signIn(String username, String password);
+public interface AuthenticationService extends UserDetailsService {
+    User signIn(User user);
 
     void signOut();
 }

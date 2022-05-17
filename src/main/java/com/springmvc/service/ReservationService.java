@@ -1,10 +1,10 @@
-package com.springmvc.dao;
+package com.springmvc.service;
 
 import com.springmvc.entity.Reservation;
 
 import java.util.List;
 
-public interface ReservationDAO {
+public interface ReservationService {
     List<Reservation> findAll();
 
     List<Reservation> findManyByUserId(int userId);

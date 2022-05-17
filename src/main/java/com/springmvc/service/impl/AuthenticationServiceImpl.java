@@ -1,15 +1,17 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.entity.User;
-import com.springmvc.service.AuthenticationService;
 import com.springmvc.service.UserService;
+import org.springframework.security.core.userdetails.User;
+import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
 
 @Service
 @Transactional
-public class AuthenticationServiceImpl implements AuthenticationService {
+public class AuthenticationServiceImpl implements UserDetailsService {
 
     private final UserService userService;
 
@@ -17,19 +19,38 @@ public class AuthenticationServiceImpl implements AuthenticationService {
         this.userService = userService;
     }
 
+    @Transactional
     @Override
-    public User signIn(String username, String password) {
-        User user = userService.findOneByUsername(username);
+    public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
+        com.springmvc.entity.User user = userService.findOneByUsername(username);
 
-        if (user == null) return null;
+        if (user == null) throw new UsernameNotFoundException("User not found");
 
-        if (user.getPassword().equals(password)) return user;
+        User.UserBuilder builder = User.withUsername(username);
+//        builder.disabled((user.isEnabled()))
+        builder.disabled(false);
+        builder.password(user.getPassword());
 
-        return null;
+        return builder.build();
     }
-
-    @Override
-    public void signOut() {
-
-    }
+//
+//    @Override
+//    public User signIn(User user) {
+//        User matchUser = userService.findOneByUsername(user.getUsername());
+//
+//        if (matchUser == null) return null;
+//
+//        if (matchUser.getPassword().equals(user.getPassword())) {
+//
+//            return user;
+//        }
+//        ;
+//
+//        return null;
+//    }
+//
+//    @Override
+//    public void signOut() {
+//
+//    }
 }

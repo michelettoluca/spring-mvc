@@ -1,21 +1,22 @@
 package com.springmvc.config;
 
-import org.hibernate.SessionFactory;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.ComponentScan;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.context.annotation.PropertySource;
 import org.springframework.core.env.Environment;
 import org.springframework.jdbc.datasource.DriverManagerDataSource;
-import org.springframework.orm.hibernate5.HibernateTransactionManager;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.orm.jpa.JpaTransactionManager;
+import org.springframework.orm.jpa.JpaVendorAdapter;
+import org.springframework.orm.jpa.LocalContainerEntityManagerFactoryBean;
+import org.springframework.orm.jpa.vendor.HibernateJpaVendorAdapter;
 import org.springframework.transaction.annotation.EnableTransactionManagement;
 
+import javax.persistence.SharedCacheMode;
+import javax.persistence.ValidationMode;
 import javax.sql.DataSource;
 import java.util.Properties;
 
-// Ha senso avere la configurazione ancora come singleton al posto di @Bean?
 @Configuration
 @EnableTransactionManagement
 @ComponentScan(basePackages = {"com.springmvc"})
@@ -26,17 +27,6 @@ public class HibernateConfig {
 
     public HibernateConfig(Environment env) {
         this.env = env;
-    }
-
-    @Bean
-    public LocalSessionFactoryBean sessionFactory() {
-        LocalSessionFactoryBean sessionFactory = new LocalSessionFactoryBean();
-
-        sessionFactory.setDataSource(dataSource());
-        sessionFactory.setPackagesToScan("com.springmvc.entity");
-        sessionFactory.setHibernateProperties(hibernateProperties());
-
-        return sessionFactory;
     }
 
     @Bean
@@ -51,62 +41,55 @@ public class HibernateConfig {
         return dataSource;
     }
 
+    @Bean
+    LocalContainerEntityManagerFactoryBean sessionFactory() {
+        LocalContainerEntityManagerFactoryBean factory = new LocalContainerEntityManagerFactoryBean();
+
+        factory.setJpaVendorAdapter(this.jpaVendorAdapter());
+        factory.setDataSource(dataSource());
+        factory.setPackagesToScan("com.springmvc.entity");
+        factory.setJpaProperties(this.hibernateProperties());
+        factory.setSharedCacheMode(SharedCacheMode.ENABLE_SELECTIVE);
+        factory.setValidationMode(ValidationMode.NONE);
+
+        return factory;
+    }
+
+    @Bean
+    public JpaVendorAdapter jpaVendorAdapter() {
+        HibernateJpaVendorAdapter hibernateJpaVendorAdapter = new HibernateJpaVendorAdapter();
+
+        hibernateJpaVendorAdapter.setShowSql(true);
+        hibernateJpaVendorAdapter.setGenerateDdl(false);
+        hibernateJpaVendorAdapter.setDatabasePlatform(env.getRequiredProperty("hibernate.dialect"));
+
+        return hibernateJpaVendorAdapter;
+    }
+
     private Properties hibernateProperties() {
         Properties properties = new Properties();
 
+        properties.put("javax.persistence.schema-generation.database.action", "none");
         properties.put("hibernate.dialect", env.getRequiredProperty("hibernate.dialect"));
         properties.put("hibernate.show_sql", env.getRequiredProperty("hibernate.show_sql"));
+        properties.put("hibernate.format_sql", env.getRequiredProperty("hibernate.format_sql"));
         properties.put("hibernate.current_session_context_class", env.getRequiredProperty("hibernate.current_session_context_class"));
         properties.put("hibernate.hbm2ddl_auto", env.getRequiredProperty("hibernate.hbm2ddl_auto"));
 
+        //Setting C3P0 properties
+        //properties.put(C3P0_MIN_SIZE, env.getProperty("hibernate.c3p0.min_size"));
+        //properties.put(C3P0_MAX_SIZE, env.getProperty("hibernate.c3p0.max_size"));
+        //properties.put(C3P0_ACQUIRE_INCREMENT, env.getProperty("hibernate.c3p0.acquire_increment"));
+        //properties.put(C3P0_TIMEOUT, env.getProperty("hibernate.c3p0.timeout"));
+        //properties.put(C3P0_MAX_STATEMENTS, env.getProperty("hibernate.c3p0.max_statements"));
         return properties;
     }
 
     @Bean
-    @Autowired
-    public HibernateTransactionManager transactionManager(SessionFactory s) {
-        HibernateTransactionManager txManager = new HibernateTransactionManager();
+    public JpaTransactionManager transactionManager() {
+        JpaTransactionManager transactionManager = new JpaTransactionManager();
+        transactionManager.setEntityManagerFactory(sessionFactory().getObject());
 
-        txManager.setSessionFactory(s);
-
-        return txManager;
+        return transactionManager;
     }
-
-//    public static SessionFactory getSessionFactory() {
-//        if (sessionFactory == null) {
-//            try {
-//                Configuration configuration = new Configuration();
-//
-//                Properties settings = new Properties();
-//
-//                settings.put(Environment.DRIVER, "org.postgresql.Driver");
-//                settings.put(Environment.URL, "jdbc:postgresql://localhost:5432/rentalcar?useSSL=false");
-//                settings.put(Environment.USER, "postgres");
-//                settings.put(Environment.PASS, "asdasd");
-//                settings.put(Environment.DIALECT, "org.hibernate.dialect.PostgreSQLDialect");
-//
-//                settings.put(Environment.SHOW_SQL, "true");
-//
-//                settings.put(Environment.CURRENT_SESSION_CONTEXT_CLASS, "thread");
-//
-//                settings.put(Environment.HBM2DDL_AUTO, "update");
-//
-//                configuration.setProperties(settings);
-//
-//                configuration.addAnnotatedClass(User.class);
-//                configuration.addAnnotatedClass(Vehicle.class);
-//                configuration.addAnnotatedClass(Reservation.class);
-//
-//                ServiceRegistry serviceRegistry = new StandardServiceRegistryBuilder()
-//                        .applySettings(configuration.getProperties())
-//                        .build();
-//
-//                sessionFactory = configuration.buildSessionFactory(serviceRegistry);
-//            } catch (Exception e) {
-//                e.printStackTrace();
-//            }
-//        }
-//
-//        return sessionFactory;
-//    }
 }

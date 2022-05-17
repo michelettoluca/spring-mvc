@@ -11,7 +11,6 @@
 
         <put-attribute name="navbar" value="/WEB-INF/template/navbar.jsp"/>
         <put-attribute name="content" value=""/>
-        <put-attribute name="footer" value="/WEB-INF/template/footer.jsp"/>
 
         <put-attribute name="formHeader" value=""/>
         <put-attribute name="submitButton" value=""/>
@@ -35,6 +34,26 @@
     <definition name="addCustomer" extends="saveUser">
         <put-attribute name="formHeader" value="Add customer"/>
         <put-attribute name="submitButton" value="Add customer"/>
+    </definition>
+
+    <definition name="editCustomer" extends="saveUser">
+        <put-attribute name="formHeader" value="Edit customer"/>
+        <put-attribute name="submitButton" value="Edit customer"/>
+    </definition>
+
+    <definition name="saveVehicle" template="/WEB-INF/view/vehicle/save.jsp">
+        <put-attribute name="formHeader" value=""/>
+        <put-attribute name="submitButton" value=""/>
+    </definition>
+
+    <definition name="addVehicle" extends="saveVehicle">
+        <put-attribute name="formHeader" value="Add vehicle"/>
+        <put-attribute name="submitButton" value="Add vehicle"/>
+    </definition>
+
+    <definition name="editVehicle" extends="saveVehicle">
+        <put-attribute name="formHeader" value="Edit vehicle"/>
+        <put-attribute name="submitButton" value="Edit vehicle"/>
     </definition>
 
     <!-- route "/" -->
@@ -62,20 +81,49 @@
     </definition>
 
     <definition name="vehicles/details" extends="base">
-        <put-attribute name="title" value="VEHICLE/DETAILS ASDASD"/>
+        <put-attribute name="title" value="VEHICLE/DETAILS"/>
         <put-attribute name="content" value="/WEB-INF/view/vehicle/details.jsp"/>
+    </definition>
+
+    <definition name="vehicles/add" extends="base">
+        <put-attribute name="title" value="addVehicle"/>
+        <put-attribute name="content" value="addVehicle"/>
+    </definition>
+
+    <definition name="vehicles/edit" extends="base">
+        <put-attribute name="title" value="editVehicle"/>
+        <put-attribute name="content" value="editVehicle"/>
     </definition>
 
     <!-- route "/admin" -->
 
-    <definition name="admin/add-customer" extends="base">
-        <put-attribute name="title" value="Add customer"/>
-        <put-attribute name="content" value="saveUser"/>
+    <definition name="admin" extends="base">
+        <put-attribute name="title" value="Admin dashboard"/>
+        <put-attribute name="content" value="/WEB-INF/view/admin/dashboard.jsp"/>
     </definition>
 
-    <definition name="profile/edit-user" extends="base">
+    <definition name="admin/add-customer" extends="base">
+        <put-attribute name="title" value="Add customer"/>
+        <put-attribute name="content" value="addCustomer"/>
+    </definition>
+
+    <definition name="admin/edit-customer" extends="base">
+        <put-attribute name="title" value="Edit customer"/>
+        <put-attribute name="content" value="editCustomer"/>
+    </definition>
+
+    <!-- route "/reservations" -->
+
+    <definition name="reservations" extends="base">
         <put-attribute name="title" value="Edit profile"/>
-        <put-attribute name="content" value="saveUser"/>
+        <put-attribute name="content" value="/WEB-INF/view/reservation/list.jsp"/>
+    </definition>
+
+    <!-- route "/profile" -->
+
+    <definition name="profile/edit" extends="base">
+        <put-attribute name="title" value="Edit profile"/>
+        <put-attribute name="content" value="editProfile"/>
     </definition>
 
 </tiles-definitions>

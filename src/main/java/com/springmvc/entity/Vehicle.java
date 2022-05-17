@@ -1,5 +1,7 @@
 package com.springmvc.entity;
 
+import jakarta.validation.constraints.NotNull;
+
 import javax.persistence.*;
 import java.io.Serializable;
 import java.time.LocalDate;
@@ -19,9 +21,11 @@ public class Vehicle implements Serializable {
     @Column(name = "model")
     private String model;
 
+    //    @Temporal(TemporalType.DATE)
     @Column(name = "date_of_registration")
     private LocalDate dateOfRegistration;
 
+    @NotNull
     @Column(name = "plate_number", unique = true)
     private String plateNumber;
 
@@ -31,13 +35,14 @@ public class Vehicle implements Serializable {
     @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
     private List<Reservation> reservations;
 
-    public Vehicle(int id, String brand, String model, LocalDate dateOfRegistration, String plateNumber, String type) {
+    public Vehicle(int id, String brand, String model, LocalDate dateOfRegistration, String plateNumber, String type, List<Reservation> reservations) {
         this.id = id;
         this.brand = brand;
         this.model = model;
         this.dateOfRegistration = dateOfRegistration;
         this.plateNumber = plateNumber;
         this.type = type;
+        this.reservations = reservations;
     }
 
     public Vehicle(String brand, String model, LocalDate dateOfRegistration, String plateNumber, String type) {

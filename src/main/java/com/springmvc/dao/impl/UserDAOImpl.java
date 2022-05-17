@@ -2,6 +2,7 @@ package com.springmvc.dao.impl;
 
 import com.springmvc.dao.UserDAO;
 import com.springmvc.entity.User;
+import com.springmvc.type.UserRole;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.hibernate.Transaction;
@@ -31,6 +32,22 @@ public class UserDAOImpl implements UserDAO {
             Root<User> root = query.from(User.class);
 
             query.select(root);
+
+            return session.createQuery(query).getResultList();
+        }
+    }
+
+    @Override
+    public List<User> findManyByRole(UserRole role) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<User> query = criteriaBuilder.createQuery(User.class);
+
+            Root<User> root = query.from(User.class);
+
+            Path<UserRole> rRole = root.get("role");
+
+            query.select(root).where(criteriaBuilder.equal(rRole, role));
 
             return session.createQuery(query).getResultList();
         }
@@ -99,7 +116,7 @@ public class UserDAOImpl implements UserDAO {
             User user = findOneById(id);
 
             if (user == null) throw new Exception("User not found");
-            
+
             session.delete(user);
 
             transaction.commit();

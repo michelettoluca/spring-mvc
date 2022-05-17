@@ -1,8 +1,9 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.dao.impl.UserDAOImpl;
+import com.springmvc.dao.UserDAO;
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
+import com.springmvc.type.UserRole;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -12,15 +13,20 @@ import java.util.List;
 @Transactional
 public class UserServiceImpl implements UserService {
 
-    private final UserDAOImpl dao;
+    private final UserDAO dao;
 
-    public UserServiceImpl(UserDAOImpl dao) {
+    public UserServiceImpl(UserDAO dao) {
         this.dao = dao;
     }
 
     @Override
     public List<User> findAll() {
         return dao.findAll();
+    }
+
+    @Override
+    public List<User> findManyByRole(UserRole role) {
+        return dao.findManyByRole(role);
     }
 
     @Override
@@ -34,8 +40,8 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void save(User user) {
-        dao.save(user);
+    public User save(User user) {
+        return dao.save(user);
     }
 
     @Override

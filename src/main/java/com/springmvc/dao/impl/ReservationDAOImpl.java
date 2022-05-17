@@ -37,6 +37,22 @@ public class ReservationDAOImpl implements ReservationDAO {
     }
 
     @Override
+    public List<Reservation> findManyByUserId(int userId) {
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Reservation> query = criteriaBuilder.createQuery(Reservation.class);
+
+            Root<Reservation> root = query.from(Reservation.class);
+
+            Path<Integer> rUserId = root.get("user").get("id");
+
+            query.select(root).where(criteriaBuilder.equal(rUserId, userId));
+
+            return session.createQuery(query).getResultList();
+        }
+    }
+
+    @Override
     public Reservation findOneById(int id) {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();

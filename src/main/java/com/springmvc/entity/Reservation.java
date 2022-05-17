@@ -15,9 +15,11 @@ public class Reservation implements Serializable {
     @Column(name = "id")
     private int id;
 
+    //    @Temporal(TemporalType.DATE)
     @Column(name = "begins_at")
     private LocalDate beginsAt;
 
+    //    @Temporal(TemporalType.DATE)
     @Column(name = "ends_at")
     private LocalDate endsAt;
 
