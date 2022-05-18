@@ -19,6 +19,11 @@
                     <td>${tmpReservation.beginsAt}</td>
                     <td>${tmpReservation.endsAt}</td>
                     <td>${tmpReservation.status}</td>
+                    <c:if test="${tmpReservation.status != 'APPROVED'}">
+                        <td>
+                            <a href="<c:url value="/reservations/save?id=${tmpReservation.id}"/>">Edit</a>
+                        </td>
+                    </c:if>
                 </tr>
             </c:forEach>
         </table>

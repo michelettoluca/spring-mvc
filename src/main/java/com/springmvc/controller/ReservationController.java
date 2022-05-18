@@ -8,6 +8,7 @@ import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.web.bind.annotation.RequestParam;
 
 import java.util.List;
 
@@ -34,6 +35,20 @@ public class ReservationController {
         return "reservations";
     }
 
+    @RequestMapping(value = "/save", method = RequestMethod.GET)
+    public String getSaveReservation(
+            Model model,
+            @RequestParam Integer id
+    ) {
+        Reservation reservation = reservationService.findOneById(id);
+
+        model.addAttribute("reservation", reservation);
+
+        System.out.println(reservation.getUser());
+
+        return "reservations/edit";
+    }
+
     @RequestMapping(value = "/edit-status", method = RequestMethod.POST)
     public String postUpdateStatus(
             @ModelAttribute("id") Integer id,
@@ -49,5 +64,15 @@ public class ReservationController {
         if (origin != null) return redirectTo + origin + "?userId=" + reservation.getUser().getId();
 
         return redirectTo + "reservations";
+    }
+
+    @RequestMapping(value = "/save", method = RequestMethod.POST)
+    public String postUpdateStatus(
+            @ModelAttribute("reservation") Reservation reservation
+    ) {
+        System.out.println(reservation);
+        reservationService.save(reservation);
+
+        return "redirect:/reservations";
     }
 }

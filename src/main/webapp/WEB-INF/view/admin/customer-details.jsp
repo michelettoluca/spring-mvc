@@ -47,24 +47,24 @@
                                     <span class="info__value">${reservation.beginsAt} - ${reservation.endsAt}</span>
                                 </div>
                             </div>
-                                <%--                            <c:if test="${reservation.status == 'PENDING'}">--%>
-                            <div class="reservation__actions">
-                                <form method="POST"
-                                      action="${pageContext.request.contextPath}/reservations/edit-status">
-                                    <input type="hidden" name="origin" value="admin"/>
-                                    <input type="hidden" name="id" value="${reservation.id}"/>
-                                    <input type="hidden" name="status" value="APPROVED"/>
-                                    <input class="reservation__action --approve" type="submit" value="Approve">
-                                </form>
-                                <form method="POST"
-                                      action="${pageContext.request.contextPath}/reservations/edit-status">
-                                    <input type="hidden" name="origin" value="admin"/>
-                                    <input type="hidden" name="id" value="${reservation.id}"/>
-                                    <input type="hidden" name="status" value="DENIED"/>
-                                    <input class="reservation__action --deny" type="submit" value="Deny">
-                                </form>
-                            </div>
-                                <%--                            </c:if>--%>
+                            <c:if test="${reservation.status == 'PENDING'}">
+                                <div class="reservation__actions">
+                                    <form method="POST"
+                                          action="${pageContext.request.contextPath}/reservations/edit-status">
+                                        <input type="hidden" name="origin" value="admin"/>
+                                        <input type="hidden" name="id" value="${reservation.id}"/>
+                                        <input type="hidden" name="status" value="APPROVED"/>
+                                        <input class="reservation__action --approve" type="submit" value="Approve">
+                                    </form>
+                                    <form method="POST"
+                                          action="${pageContext.request.contextPath}/reservations/edit-status">
+                                        <input type="hidden" name="origin" value="admin"/>
+                                        <input type="hidden" name="id" value="${reservation.id}"/>
+                                        <input type="hidden" name="status" value="DENIED"/>
+                                        <input class="reservation__action --deny" type="submit" value="Deny">
+                                    </form>
+                                </div>
+                            </c:if>
                         </div>
                     </c:forEach>
                 </div>

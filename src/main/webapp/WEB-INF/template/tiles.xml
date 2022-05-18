@@ -119,6 +119,11 @@
         <put-attribute name="content" value="/WEB-INF/view/reservation/list.jsp"/>
     </definition>
 
+    <definition name="reservations/edit" extends="base">
+        <put-attribute name="title" value="Edit reservation"/>
+        <put-attribute name="content" value="/WEB-INF/view/reservation/save.jsp"/>
+    </definition>
+
     <!-- route "/profile" -->
 
     <definition name="profile/edit" extends="base">

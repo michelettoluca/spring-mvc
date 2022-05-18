@@ -1,5 +1,6 @@
 package com.springmvc.service.impl;
 
+import com.springmvc.config.security.Encoder;
 import com.springmvc.dao.UserDAO;
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
@@ -14,9 +15,14 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDAO dao;
+    private final Encoder encoder;
 
-    public UserServiceImpl(UserDAO dao) {
+    public UserServiceImpl(
+            UserDAO dao,
+            Encoder encoder
+    ) {
         this.dao = dao;
+        this.encoder = encoder;
     }
 
     @Override
@@ -41,6 +47,8 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
+        user.setPassword(encoder.passwordEncoder().encode(user.getPassword()));
+        System.out.println(user.getPassword());
         return dao.save(user);
     }
 

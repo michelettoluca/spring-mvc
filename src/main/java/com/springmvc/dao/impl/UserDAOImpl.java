@@ -115,9 +115,7 @@ public class UserDAOImpl implements UserDAO {
 
             User user = findOneById(id);
 
-            if (user == null) throw new Exception("User not found");
-
-            session.delete(user);
+            session.delete(session.merge(user));
 
             transaction.commit();
         } catch (Exception e) {
