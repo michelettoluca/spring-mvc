@@ -31,6 +31,10 @@ public class VehicleServiceImpl implements VehicleService {
         return dao.findAvailableVehicles(from, to);
     }
 
+    public List<Vehicle> findAvailableVehiclesCriteria(LocalDate from, LocalDate to) {
+        return dao.findAvailableVehiclesCriteria(from, to);
+    }
+
     @Override
     public Vehicle findOneById(int id) {
         return dao.findOneById(id);

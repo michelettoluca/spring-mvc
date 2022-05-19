@@ -56,6 +56,22 @@
         <put-attribute name="submitButton" value="Edit vehicle"/>
     </definition>
 
+    <definition name="saveReservation" template="/WEB-INF/view/reservation/save.jsp">
+        <put-attribute name="formHeader" value=""/>
+        <put-attribute name="submitButton" value=""/>
+    </definition>
+
+    <definition name="addReservation" extends="saveReservation">
+        <put-attribute name="formHeader" value="Add reservation"/>
+        <put-attribute name="submitButton" value="Add reservation"/>
+    </definition>
+
+    <definition name="editReservation" extends="saveReservation">
+        <put-attribute name="formHeader" value="Edit reservation"/>
+        <put-attribute name="submitButton" value="Edit reservation"/>
+    </definition>
+
+
     <!-- route "/" -->
 
     <definition name="index" extends="base">
@@ -119,9 +135,14 @@
         <put-attribute name="content" value="/WEB-INF/view/reservation/list.jsp"/>
     </definition>
 
+    <definition name="reservations/add" extends="base">
+        <put-attribute name="title" value="Add reservation"/>
+        <put-attribute name="content" value="addReservation"/>
+    </definition>
+
     <definition name="reservations/edit" extends="base">
         <put-attribute name="title" value="Edit reservation"/>
-        <put-attribute name="content" value="/WEB-INF/view/reservation/save.jsp"/>
+        <put-attribute name="content" value="editReservation"/>
     </definition>
 
     <!-- route "/profile" -->

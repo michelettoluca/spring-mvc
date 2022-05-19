@@ -1,7 +1,6 @@
 package com.springmvc.dao.impl;
 
 import com.springmvc.dao.UserDAO;
-import com.springmvc.entity.Reservation;
 import com.springmvc.entity.User;
 import com.springmvc.type.UserRole;
 import org.hibernate.Session;
@@ -115,13 +114,6 @@ public class UserDAOImpl implements UserDAO {
             transaction = session.beginTransaction();
 
             User user = findOneById(id);
-
-            for (Reservation reservation : user.getReservations()) {
-                session.delete(reservation);
-            }
-            user.setReservations(null);
-
-            user = save(user);
 
             session.delete(user);
 

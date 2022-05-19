@@ -29,11 +29,11 @@ public class Reservation implements Serializable {
     private ReservationStatus status;
 
     @ManyToOne
-    @JoinColumn(name = "user_id", nullable = false)
+    @JoinColumn(name = "user_id")
     private User user;
 
     @ManyToOne
-    @JoinColumn(name = "vehicle_id", nullable = false)
+    @JoinColumn(name = "vehicle_id")
     private Vehicle vehicle;
 
     public Reservation(User user, Vehicle vehicle, LocalDate beginsAt, LocalDate endsAt, ReservationStatus status) {

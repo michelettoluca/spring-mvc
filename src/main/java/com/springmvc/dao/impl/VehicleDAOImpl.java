@@ -1,7 +1,6 @@
 package com.springmvc.dao.impl;
 
 import com.springmvc.dao.VehicleDAO;
-import com.springmvc.entity.Reservation;
 import com.springmvc.entity.Vehicle;
 import com.springmvc.type.ReservationStatus;
 import org.hibernate.Session;
@@ -10,10 +9,7 @@ import org.hibernate.Transaction;
 import org.hibernate.query.Query;
 import org.springframework.stereotype.Repository;
 
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
+import javax.persistence.criteria.*;
 import java.time.LocalDate;
 import java.util.List;
 
@@ -54,6 +50,36 @@ public class VehicleDAOImpl implements VehicleDAO {
             query.setParameter("status", ReservationStatus.DENIED);
 
             return query.getResultList();
+        }
+    }
+
+    public List<Vehicle> findAvailableVehiclesCriteria(LocalDate from, LocalDate to) {
+
+        try (Session session = sessionFactory.openSession()) {
+            CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
+            CriteriaQuery<Vehicle> query = criteriaBuilder.createQuery(Vehicle.class);
+            Subquery<Vehicle> subQuery = query.subquery(Vehicle.class);
+
+            Root<Vehicle> root = query.from(Vehicle.class);
+            Root<Vehicle> subQueryRoot = subQuery.from(Vehicle.class);
+
+            root.join("reservations");
+
+            System.out.println(subQueryRoot.getModel().toString());
+
+            Subquery<Vehicle> aa = subQuery.select(subQueryRoot).where(
+                    criteriaBuilder.and(
+                            criteriaBuilder.or(
+                                    criteriaBuilder.between(subQueryRoot.get("reservations").get("beginsAt"), from, to),
+                                    criteriaBuilder.between(subQueryRoot.get("reservations").get("endsAt"), from, to)
+                            ),
+                            criteriaBuilder.equal(subQueryRoot.get("status"), ReservationStatus.DENIED)
+                    )
+            );
+
+            query.select(root).where(criteriaBuilder.not(criteriaBuilder.in(aa)));
+
+            return session.createQuery(query).getResultList();
         }
     }
 
@@ -118,13 +144,6 @@ public class VehicleDAOImpl implements VehicleDAO {
             transaction = session.beginTransaction();
 
             Vehicle vehicle = findOneById(id);
-
-            for (Reservation reservation : vehicle.getReservations()) {
-                session.delete(reservation);
-            }
-            vehicle.setReservations(null);
-
-            vehicle = save(vehicle);
 
             session.delete(vehicle);
 

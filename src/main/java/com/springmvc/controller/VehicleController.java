@@ -38,7 +38,7 @@ public class VehicleController {
         List<Vehicle> availableVehicles = new ArrayList<>();
 
         if (from != null && !from.isEmpty() && to != null && !to.isEmpty()) {
-            availableVehicles = vehicleService.findAvailableVehicles(
+            availableVehicles = vehicleService.findAvailableVehiclesCriteria(
                     LocalDate.parse(from),
                     LocalDate.parse(to)
             );

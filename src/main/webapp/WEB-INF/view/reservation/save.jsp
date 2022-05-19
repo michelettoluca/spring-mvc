@@ -1,5 +1,6 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
+<%@ taglib prefix="tiles" uri="http://tiles.apache.org/tags-tiles" %>
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 
 <%--@elvariable id="reservation" type="com.springmvc.entity.Reservation"--%>
@@ -15,7 +16,7 @@
 
 <div class="form-wrapper">
     <form:form method="POST" action="${pageContext.request.contextPath}/reservations/save" modelAttribute="reservation">
-        <span class="form-header">Edit reservation</span>
+        <span class="form-header"><tiles:insertAttribute name="formHeader"/></span>
         <form:input path="id" type="hidden" name="id" value="${reservation.id}"/>
         <form:input path="user.id" type="hidden" name="user" value="${reservation.user.id}"/>
         <form:input path="vehicle.id" type="hidden" name="vehicle" value="${reservation.vehicle.id}"/>
@@ -51,6 +52,6 @@
         </div>
 
 
-        <button class="button-submit">Edit reservation</button>
+        <button class="button-submit"><tiles:insertAttribute name="submitButton"/></button>
     </form:form>
 </div>

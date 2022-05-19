@@ -40,7 +40,6 @@ public class ReservationController {
             Model model
     ) {
         String username = Utils.getAuthenticatedUserUsername();
-        System.out.println(username);
 
         User user = userService.findOneByUsername(username);
 
@@ -70,7 +69,7 @@ public class ReservationController {
 
         model.addAttribute("reservation", reservation);
 
-        return "reservations/edit";
+        return "reservations/" + action;
     }
 
     //  ----
@@ -86,6 +85,8 @@ public class ReservationController {
         String redirectTo = "redirect:/";
 
         Reservation reservation = reservationService.findOneById(id);
+
+        //
         reservation.setStatus(status);
         reservationService.save(reservation);
 

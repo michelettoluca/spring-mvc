@@ -17,4 +17,6 @@ public interface VehicleDAO {
     Vehicle save(Vehicle vehicle);
 
     void delete(int id);
+
+    List<Vehicle> findAvailableVehiclesCriteria(LocalDate from, LocalDate to);
 }

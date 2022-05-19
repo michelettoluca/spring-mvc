@@ -17,4 +17,6 @@ public interface VehicleService {
     void delete(int id);
 
     Vehicle findOneByPlateNumber(String plateNumber);
+
+    List<Vehicle> findAvailableVehiclesCriteria(LocalDate from, LocalDate to);
 }
