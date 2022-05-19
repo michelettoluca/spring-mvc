@@ -4,6 +4,15 @@
 
 <%--@elvariable id="reservation" type="com.springmvc.entity.Reservation"--%>
 
+<c:choose>
+    <c:when test="${param.action == 'add'}">
+        <c:set var="inputType" value="hidden"/>
+    </c:when>
+    <c:when test="${param.action == 'edit'}">
+        <c:set var="inputType" value="date"/>
+    </c:when>
+</c:choose>
+
 <div class="form-wrapper">
     <form:form method="POST" action="${pageContext.request.contextPath}/reservations/save" modelAttribute="reservation">
         <span class="form-header">Edit reservation</span>
@@ -20,16 +29,28 @@
             <span>${reservation.vehicle.plateNumber}</span>
         </div>
         <hr>
+
         <div class="form-field">
             <label class="input-label" for="beginsAt">From</label>
-            <form:input path="beginsAt" class="input-text" type="date" name="beginsAt" id="beginsAt"
+
+            <c:if test="${param.action == 'add'}">
+                <span>${reservation.beginsAt}</span>
+            </c:if>
+            <form:input path="beginsAt" class="input-text" type="${inputType}" name="beginsAt" id="beginsAt"
                         value="${reservation.beginsAt}"/>
+
         </div>
         <div class="form-field">
             <label class="input-label" for="endsAt">To</label>
-            <form:input path="endsAt" class="input-text" type="date" name="endsAt" id="endsAt"
+
+            <c:if test="${param.action == 'add'}">
+                <span>${reservation.endsAt}</span>
+            </c:if>
+            <form:input path="endsAt" class="input-text" type="${inputType}" name="endsAt" id="endsAt"
                         value="${reservation.endsAt}"/>
         </div>
+
+
         <button class="button-submit">Edit reservation</button>
     </form:form>
 </div>

@@ -1,8 +1,13 @@
 package com.springmvc.controller;
 
 import com.springmvc.entity.Reservation;
+import com.springmvc.entity.User;
+import com.springmvc.entity.Vehicle;
 import com.springmvc.service.ReservationService;
+import com.springmvc.service.UserService;
+import com.springmvc.service.VehicleService;
 import com.springmvc.type.ReservationStatus;
+import com.springmvc.utils.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -10,27 +15,36 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 
-import java.util.List;
+import java.time.LocalDate;
 
 @Controller
 @RequestMapping(value = "/reservations")
 public class ReservationController {
 
     private final ReservationService reservationService;
+    private final UserService userService;
+    private final VehicleService vehicleService;
 
-    public ReservationController(ReservationService reservationService) {
+    public ReservationController(ReservationService reservationService, UserService userService, VehicleService vehicleService) {
         this.reservationService = reservationService;
+        this.userService = userService;
+        this.vehicleService = vehicleService;
     }
+
+    //  ----
+    //  GET requests
+    //  ----
 
     @RequestMapping(method = RequestMethod.GET)
     public String getUserReservations(
             Model model
     ) {
-        int tmpUserId = 15;
+        String username = Utils.getAuthenticatedUserUsername();
+        System.out.println(username);
 
-        List<Reservation> reservations = reservationService.findManyByUserId(tmpUserId);
+        User user = userService.findOneByUsername(username);
 
-        model.addAttribute("reservations", reservations);
+        model.addAttribute("reservations", user.getReservations());
 
         return "reservations";
     }
@@ -38,16 +52,30 @@ public class ReservationController {
     @RequestMapping(value = "/save", method = RequestMethod.GET)
     public String getSaveReservation(
             Model model,
-            @RequestParam Integer id
+            @RequestParam String action,
+            @RequestParam(required = false) Integer id,
+            @RequestParam(required = false) Integer vehicleId,
+            @RequestParam(required = false) String beginsAt,
+            @RequestParam(required = false) String endsAt
     ) {
-        Reservation reservation = reservationService.findOneById(id);
+        Reservation reservation;
+        if (action.equals("add")) {
+            String username = Utils.getAuthenticatedUserUsername();
+            User user = userService.findOneByUsername(username);
+            Vehicle vehicle = vehicleService.findOneById(vehicleId);
+            reservation = new Reservation(user, vehicle, LocalDate.parse(beginsAt), LocalDate.parse(endsAt), ReservationStatus.PENDING);
+        } else {
+            reservation = reservationService.findOneById(id);
+        }
 
         model.addAttribute("reservation", reservation);
 
-        System.out.println(reservation.getUser());
-
         return "reservations/edit";
     }
+
+    //  ----
+    //  POST requests
+    //  ----
 
     @RequestMapping(value = "/edit-status", method = RequestMethod.POST)
     public String postUpdateStatus(
@@ -67,10 +95,9 @@ public class ReservationController {
     }
 
     @RequestMapping(value = "/save", method = RequestMethod.POST)
-    public String postUpdateStatus(
+    public String postSaveReservation(
             @ModelAttribute("reservation") Reservation reservation
     ) {
-        System.out.println(reservation);
         reservationService.save(reservation);
 
         return "redirect:/reservations";

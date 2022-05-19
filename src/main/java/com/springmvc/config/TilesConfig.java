@@ -16,13 +16,4 @@ public class TilesConfig {
 
         return tilesConfigurer;
     }
-
-//    @Bean
-//    public UrlBasedViewResolver tilesResolver() {
-//        UrlBasedViewResolver tilesResolver = new UrlBasedViewResolver();
-//
-//        tilesResolver.setViewClass(TilesView.class);
-//
-//        return tilesResolver;
-//    }
 }

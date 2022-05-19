@@ -1,6 +1,7 @@
 package com.springmvc.dao.impl;
 
 import com.springmvc.dao.VehicleDAO;
+import com.springmvc.entity.Reservation;
 import com.springmvc.entity.Vehicle;
 import com.springmvc.type.ReservationStatus;
 import org.hibernate.Session;
@@ -45,7 +46,7 @@ public class VehicleDAOImpl implements VehicleDAO {
             Query<Vehicle> query = session.createQuery(
                     "from Vehicle as v where v.id not in " +
                             "(select v2.id from Vehicle as v2 inner join Reservation as r on r.vehicle.id = v2.id " +
-                            "where r.beginsAt < :from and r.endsAt > :to and (r.status != :status))",
+                            "where (r.beginsAt between :from and :to or r.endsAt between :from and : to) and (r.status != :status))",
                     Vehicle.class);
 
             query.setParameter("from", from);
@@ -118,7 +119,14 @@ public class VehicleDAOImpl implements VehicleDAO {
 
             Vehicle vehicle = findOneById(id);
 
-            session.delete(session.merge(vehicle));
+            for (Reservation reservation : vehicle.getReservations()) {
+                session.delete(reservation);
+            }
+            vehicle.setReservations(null);
+
+            vehicle = save(vehicle);
+
+            session.delete(vehicle);
 
             transaction.commit();
         } catch (Exception e) {

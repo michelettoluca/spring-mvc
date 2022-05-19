@@ -20,8 +20,12 @@
                     <td>${tmpReservation.endsAt}</td>
                     <td>${tmpReservation.status}</td>
                     <c:if test="${tmpReservation.status != 'APPROVED'}">
+                        <c:url var="editReservationUrl" value="/reservations/save">
+                            <c:param name="action" value="edit"/>
+                            <c:param name="id" value="${tmpReservation.id}"/>
+                        </c:url>
                         <td>
-                            <a href="<c:url value="/reservations/save?id=${tmpReservation.id}"/>">Edit</a>
+                            <a href="${editReservationUrl}">Edit</a>
                         </td>
                     </c:if>
                 </tr>

@@ -1,6 +1,5 @@
-package com.springmvc.config;
+package com.springmvc.config.security;
 
-import com.springmvc.config.security.Encoder;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.context.annotation.Bean;
@@ -11,6 +10,7 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configuration.WebSecurityConfigurerAdapter;
 import org.springframework.security.core.userdetails.UserDetailsService;
+import org.springframework.security.crypto.password.PasswordEncoder;
 
 @Configuration
 @EnableWebSecurity
@@ -18,11 +18,12 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
 
     @Qualifier("customUserDetailsService")
     private final UserDetailsService userDetailsService;
-    private final Encoder encoder;
+    @Qualifier("customPasswordEncoder")
+    private final PasswordEncoder passwordEncoder;
 
-    public SpringSecurityConfig(UserDetailsService userDetailsService, Encoder encoder) {
+    public SpringSecurityConfig(UserDetailsService userDetailsService, PasswordEncoder passwordEncoder) {
         this.userDetailsService = userDetailsService;
-        this.encoder = encoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Autowired
@@ -31,29 +32,31 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
         auth.authenticationProvider(authenticationProvider());
     }
 
-//    @Bean
-//    public PasswordEncoder passwordEncoder() {
-//        return new BCryptPasswordEncoder();
-//    }
-
     @Bean
     public DaoAuthenticationProvider authenticationProvider() {
         DaoAuthenticationProvider authenticationProvider = new DaoAuthenticationProvider();
 
         authenticationProvider.setUserDetailsService(userDetailsService);
-        authenticationProvider.setPasswordEncoder(encoder.passwordEncoder());
+        authenticationProvider.setPasswordEncoder(passwordEncoder);
 
         return authenticationProvider;
     }
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
+        final String[] publicPages = new String[]{"/"};
+        final String[] authenticatedPages = new String[]{"/profile/**", "/vehicles/**"};
+        final String[] adminPages = new String[]{"/admin/**"};
+        final String[] customerPages = new String[]{"/reservations/**"};
+
         http.authorizeRequests()
-                .antMatchers("/").permitAll()
-                .antMatchers("/admin/**").access("hasRole('ADMIN')")
+                .antMatchers(publicPages).permitAll()
+                .antMatchers(authenticatedPages).authenticated()
+                .antMatchers(customerPages).access("hasRole('CUSTOMER')")
+                .antMatchers(adminPages).access("hasRole('ADMIN')")
                 .and().formLogin().loginPage("/sign-in")
                 .usernameParameter("username").passwordParameter("password")
-                .and().csrf()
-                .and().exceptionHandling().accessDeniedPage("/sign-in?status=error");
+                .and().exceptionHandling().accessDeniedPage("/sign-in?status=error")
+                .and().csrf();
     }
 }

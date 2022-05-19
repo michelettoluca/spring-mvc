@@ -40,10 +40,4 @@ public class ContextConfig implements WebMvcConfigurer {
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/static/**").addResourceLocations("/static/");
     }
-
-//    Questo non lo metto perchè ho una sola entità
-//    @Override
-//    public void addFormatters(FormatterRegistry registry) {
-//        registry.addConverter(roleToUserProfileConverter);
-//    }
 }

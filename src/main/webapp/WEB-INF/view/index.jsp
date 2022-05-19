@@ -1,3 +1,4 @@
 <h1>
-    Hello ${name}!
+    Hello ${username}!
+    ${role}
 </h1>

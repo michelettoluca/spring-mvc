@@ -2,6 +2,7 @@ package com.springmvc.controller;
 
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
+import com.springmvc.utils.Utils;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -25,9 +26,9 @@ public class ProfileController {
     public String getProfileDetails(
             Model model
     ) {
-        int tmpUserId = 1;
+        String username = Utils.getAuthenticatedUserUsername();
 
-        User user = userService.findOneById(tmpUserId);
+        User user = userService.findOneByUsername(username);
 
         model.addAttribute("user", user);
 

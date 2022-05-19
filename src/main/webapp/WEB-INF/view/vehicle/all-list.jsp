@@ -1,4 +1,5 @@
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <c:choose>
     <c:when test="${vehicles.isEmpty()}">
@@ -27,10 +28,10 @@
                     <td>${availableVehicle.plateNumber}</td>
                     <td>${availableVehicle.type}</td>
                     <td>
-                        <form method="POST" action="<c:url value="/vehicles/delete"/>">
+                        <form:form method="POST" action="${pageContext.request.contextPath}/vehicles/delete">
                             <input type="hidden" name="id" value="${availableVehicle.id}">
                             <input type="submit" value="Delete">
-                        </form>
+                        </form:form>
                     </td>
                     <td>
                         <a href="${editVehicleUrl}">Edit</a>

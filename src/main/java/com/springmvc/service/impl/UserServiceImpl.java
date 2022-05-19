@@ -1,10 +1,11 @@
 package com.springmvc.service.impl;
 
-import com.springmvc.config.security.Encoder;
 import com.springmvc.dao.UserDAO;
 import com.springmvc.entity.User;
 import com.springmvc.service.UserService;
 import com.springmvc.type.UserRole;
+import org.springframework.beans.factory.annotation.Qualifier;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 
 import javax.transaction.Transactional;
@@ -15,14 +16,16 @@ import java.util.List;
 public class UserServiceImpl implements UserService {
 
     private final UserDAO dao;
-    private final Encoder encoder;
+
+    @Qualifier("customPasswordEncoder")
+    private final PasswordEncoder passwordEncoder;
 
     public UserServiceImpl(
             UserDAO dao,
-            Encoder encoder
+            PasswordEncoder passwordEncoder
     ) {
         this.dao = dao;
-        this.encoder = encoder;
+        this.passwordEncoder = passwordEncoder;
     }
 
     @Override
@@ -47,8 +50,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     public User save(User user) {
-        user.setPassword(encoder.passwordEncoder().encode(user.getPassword()));
-        System.out.println(user.getPassword());
+        user.setPassword(passwordEncoder.encode(user.getPassword()));
         return dao.save(user);
     }
 

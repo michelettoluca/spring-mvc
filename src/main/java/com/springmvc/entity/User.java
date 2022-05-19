@@ -30,7 +30,7 @@ public class User implements Serializable {
     @Column(name = "password")
     private String password;
 
-    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 
     public User(int id, String firstName, String lastName, UserRole role, String username, String password) {

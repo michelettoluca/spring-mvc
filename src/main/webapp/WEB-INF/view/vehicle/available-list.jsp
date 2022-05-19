@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" language="java" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <jsp:useBean id="availableVehicles" scope="request" type="java.util.List<com.springmvc.entity.Vehicle>"/>
 
@@ -29,9 +30,11 @@
                 <th>type</th>
             </tr>
             <c:forEach var="availableVehicle" items="${availableVehicles}">
-                <c:url var="updateReservationUrl" value="${pageContext.request.contextPath}/reservations/book">
-                    <c:param name="action">EDIT_VEHICLE</c:param>
-                    <c:param name="id">${availableVehicle.id}</c:param>
+                <c:url var="addReservationUrl" value="/reservations/save">
+                    <c:param name="action" value="add"/>
+                    <c:param name="vehicleId" value="${availableVehicle.id}"/>
+                    <c:param name="beginsAt" value="${param.from}"/>
+                    <c:param name="endsAt" value="${param.to}"/>
                 </c:url>
                 <tr>
                     <td>${availableVehicle.id}</td>
@@ -42,13 +45,9 @@
                     <td>${availableVehicle.type}</td>
 
                     <td>
-                        <form method="POST">
-                            <input type="hidden" name="action" value="ADD_RESERVATION">
-                            <input type="hidden" name="vehicleId" value="${availableVehicle.id}">
-                            <input type="hidden" name="beginsAt" value="${param.from}">
-                            <input type="hidden" name="endsAt" value="${param.to}">
-                            <input type="submit" value="Book reservation">
-                        </form>
+                        <a href="${addReservationUrl}">
+                            Book reservation
+                        </a>
                     </td>
                 </tr>
             </c:forEach>

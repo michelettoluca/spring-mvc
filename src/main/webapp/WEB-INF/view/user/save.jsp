@@ -5,14 +5,21 @@
 <%@ taglib prefix="form" uri="http://www.springframework.org/tags/form" %>
 
 <%--@elvariable id="user" type="com.springmvc.entity.User"--%>
+<c:choose>
+    <c:when test="${user.role == 'ADMIN'}">
+        <c:set var="role" value="ADMIN"/>
+    </c:when>
+    <c:otherwise>
+        <c:set var="role" value="CUSTOMER"/>
+    </c:otherwise>
+</c:choose>
 
 <div class="form-wrapper">
     <form:form method="POST" action="${pageContext.request.contextPath}/users/save" modelAttribute="user">
         <span class="form-header"><tiles:insertAttribute name="formHeader"/></span>
         <input type="hidden" name="origin" value="${param.origin}"/>
-        <form:input type="hidden" path="role" name="role" value="CUSTOMER"/>
+        <form:input type="hidden" path="role" name="role" value="${role}"/>
         <form:input type="hidden" path="id" name="id" value="${param.id}"/>
-
         <div class="form-field">
             <label class="input-label" for="firstName">First name</label>
             <form:input class="input-text" type="text" path="firstName" name="firstName" id="firstName"

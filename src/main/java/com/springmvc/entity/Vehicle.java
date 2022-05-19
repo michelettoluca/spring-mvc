@@ -33,7 +33,7 @@ public class Vehicle implements Serializable {
     @Column(name = "type")
     private String type;
 
-    @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER, cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "vehicle", fetch = FetchType.EAGER, cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Reservation> reservations;
 
     public Vehicle(String brand, String model, LocalDate dateOfRegistration, String plateNumber, String type) {

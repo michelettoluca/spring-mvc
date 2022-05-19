@@ -23,8 +23,12 @@ public class VehicleController {
         this.vehicleService = vehicleService;
     }
 
+    //  ----
+    //  GET requests
+    //  ----
+
     @RequestMapping(method = RequestMethod.GET)
-    public String list(
+    public String getListVehicles(
             @RequestParam(required = false) String from,
             @RequestParam(required = false) String to,
             Model model
@@ -59,6 +63,10 @@ public class VehicleController {
         return "vehicles/" + action;
     }
 
+    //  ----
+    //  POST requests
+    //  ----
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String postSaveUser(
             @ModelAttribute("vehicle") Vehicle vehicle
@@ -72,6 +80,7 @@ public class VehicleController {
     public String postDeleteUser(
             @ModelAttribute("id") Integer id
     ) {
+        System.out.println("DELETE VEHICLE");
         vehicleService.delete(id);
 
         return "redirect:/vehicles";

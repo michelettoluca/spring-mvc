@@ -21,6 +21,10 @@ public class UserController {
         this.userService = userService;
     }
 
+    //  ----
+    //  GET requests
+    //  ----
+
     @RequestMapping(method = RequestMethod.GET)
     public String getAllUsers(
             Model model
@@ -48,6 +52,10 @@ public class UserController {
         return "sign-up";
     }
 
+    //  ----
+    //  POST requests
+    //  ----
+
     @RequestMapping(value = "/save", method = RequestMethod.POST)
     public String postSaveUser(
             @RequestParam(required = false) String origin,
@@ -63,7 +71,7 @@ public class UserController {
     }
 
     @RequestMapping(value = "/delete", method = RequestMethod.POST)
-    public String postSaveUser(
+    public String postDeleteUser(
             @ModelAttribute("user") User user
     ) {
         userService.delete(user.getId());
