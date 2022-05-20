@@ -98,7 +98,7 @@ public class ReservationDAOImpl implements ReservationDAO {
 
             Reservation reservation = findOneById(id);
 
-            if (reservation == null) throw new Exception("Reservation not found");
+//            if (reservation == null) throw new Exception("Reservation not found");
 
             session.delete(reservation);
 

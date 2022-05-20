@@ -52,8 +52,11 @@ public class ReservationServiceImpl implements ReservationService {
                 reservation.getEndsAt(),
                 reservation.getStatus()
         );
+        
+        if (reservation.getId() != 0) {
 
-        dao.delete(reservation.getId());
+            dao.delete(reservation.getId());
+        }
 
         List<Vehicle> availableVehicles = vehicleService.findAvailableVehiclesCriteria(beginsAt, endsAt);
 

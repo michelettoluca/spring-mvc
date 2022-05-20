@@ -58,26 +58,23 @@ public class VehicleDAOImpl implements VehicleDAO {
         try (Session session = sessionFactory.openSession()) {
             CriteriaBuilder criteriaBuilder = session.getCriteriaBuilder();
             CriteriaQuery<Vehicle> query = criteriaBuilder.createQuery(Vehicle.class);
-            Subquery<Vehicle> subQuery = query.subquery(Vehicle.class);
+            Subquery<Vehicle> subquery = query.subquery(Vehicle.class);
 
             Root<Vehicle> root = query.from(Vehicle.class);
-            Root<Vehicle> subQueryRoot = subQuery.from(Vehicle.class);
+            Root<Vehicle> subqueryRoot = subquery.from(Vehicle.class);
 
-            root.join("reservations");
+            subquery.select(subqueryRoot.get("id"))
+                    .where(
+                            criteriaBuilder.and(
+                                    criteriaBuilder.greaterThanOrEqualTo(subqueryRoot.join("reservations").get("endsAt"), from),
+                                    criteriaBuilder.lessThanOrEqualTo(subqueryRoot.join("reservations").get("beginsAt"), to),
+                                    criteriaBuilder.notEqual(subqueryRoot.join("reservations").get("status"), ReservationStatus.DENIED)
+                            )
+                    );
 
-            System.out.println(subQueryRoot.getModel().toString());
-
-            Subquery<Vehicle> aa = subQuery.select(subQueryRoot).where(
-                    criteriaBuilder.and(
-                            criteriaBuilder.or(
-                                    criteriaBuilder.between(subQueryRoot.get("reservations").get("beginsAt"), from, to),
-                                    criteriaBuilder.between(subQueryRoot.get("reservations").get("endsAt"), from, to)
-                            ),
-                            criteriaBuilder.equal(subQueryRoot.get("status"), ReservationStatus.DENIED)
-                    )
+            query.select(root).where(
+                    criteriaBuilder.not(criteriaBuilder.in(root.get("id")).value(subquery))
             );
-
-            query.select(root).where(criteriaBuilder.not(criteriaBuilder.in(aa)));
 
             return session.createQuery(query).getResultList();
         }

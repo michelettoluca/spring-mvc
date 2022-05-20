@@ -45,14 +45,14 @@ public class SpringSecurityConfig extends WebSecurityConfigurerAdapter {
     @Override
     protected void configure(HttpSecurity http) throws Exception {
         final String[] publicPages = new String[]{"/"};
-        final String[] authenticatedPages = new String[]{"/profile/**", "/vehicles/**"};
+        final String[] authenticatedPages = new String[]{"/profile/**", "/vehicles/**", "/reservations/**"};
         final String[] adminPages = new String[]{"/admin/**"};
-        final String[] customerPages = new String[]{"/reservations/**"};
+//        final String[] customerPages = new String[]{"/reservations/**"};
 
         http.authorizeRequests()
                 .antMatchers(publicPages).permitAll()
                 .antMatchers(authenticatedPages).authenticated()
-                .antMatchers(customerPages).access("hasRole('CUSTOMER')")
+//                .antMatchers(customerPages).access("hasRole('CUSTOMER')")
                 .antMatchers(adminPages).access("hasRole('ADMIN')")
                 .and().formLogin().loginPage("/sign-in")
                 .usernameParameter("username").passwordParameter("password")

@@ -86,7 +86,6 @@ public class ReservationController {
 
         Reservation reservation = reservationService.findOneById(id);
 
-        //
         reservation.setStatus(status);
         reservationService.save(reservation);
 

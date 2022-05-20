@@ -54,14 +54,14 @@
                                         <input type="hidden" name="origin" value="admin"/>
                                         <input type="hidden" name="id" value="${reservation.id}"/>
                                         <input type="hidden" name="status" value="APPROVED"/>
-                                        <input class="reservation__action --approve" type="submit" value="Approve">
+                                        <input class="reservation__action --approve" type="submit" value="Approve"/>
                                     </form:form>
                                     <form:form method="POST"
                                                action="${pageContext.request.contextPath}/reservations/edit-status">
                                         <input type="hidden" name="origin" value="admin"/>
                                         <input type="hidden" name="id" value="${reservation.id}"/>
                                         <input type="hidden" name="status" value="DENIED"/>
-                                        <input class="reservation__action --deny" type="submit" value="Deny">
+                                        <input class="reservation__action --deny" type="submit" value="Deny"/>
                                     </form:form>
                                 </div>
                             </c:if>
